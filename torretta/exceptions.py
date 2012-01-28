@@ -1,0 +1,2 @@
+class NoTorrentFound(Exception):
+    pass
