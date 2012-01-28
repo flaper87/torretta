@@ -1,0 +1,10 @@
+Torrent Manager
+
+Torretta is a torrent manager that crawls the web looking for torrents that match a given query. It supports (or at least will) different backends for the most common torrent websites.
+
+
+TODO:
+    * Add more backends
+    * Add support for torrent clients (So far it writes the downloaded torrent in the filesystem)
+    * Cache torrent searches
+    * Fix manager commands
