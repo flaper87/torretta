@@ -1,4 +1,0 @@
-django>=1.2
-requests
-django-load
-django-mongodb-engine
