@@ -1,4 +1,5 @@
 django
 requests
 django-load
+pyquery
 -e git+git@github.com:FlaPer87/torretta.git@71df95a979f8745bca9bbb273b609ad005a8c018#egg=torretta-dev
