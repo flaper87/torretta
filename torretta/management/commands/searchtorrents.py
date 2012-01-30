@@ -33,13 +33,13 @@ class Command(BaseCommand):
         query = '%20'.join(search)
 
         mod = backends.get(backend)()
-        table = [["pk", "text", "rating", "seeds", "backend"]]
+        table = [["pk", "text", "link", "rating", "seeds", "backend"]]
 
         limit = options.pop('limit')
         for i, t in enumerate(mod.get_torrents_list(query, use_cache=options.pop('use_cache'))):
             if limit > 0 and i >= limit:
                 break
-            table.append([str(t.pk), smart_str(t.text, errors='ignore'), t.rating, t.seeds, t.backend])
+            table.append([str(t.pk), smart_str(t.text, errors='ignore'), t.link, t.rating, t.seeds, t.backend])
         pprint_table(sys.stdout, table)
 
 

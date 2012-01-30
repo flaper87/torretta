@@ -22,7 +22,9 @@ class IsoHunt(BackendBase):
         if isinstance(query, Torrent):
             query = query.link
 
-        if query.startswith("/"):
+        if query.startswith("http"):
+            return query
+        elif query.startswith("/"):
             return self.base_url + query
         return self.url % query
 
@@ -72,7 +74,8 @@ class IsoHunt(BackendBase):
                     except ValueError:
                         seeds = 0
 
-                torrent, created = Torrent.objects.get_or_create(link=href, defaults={"backend" : self.name,
+                final_link = self._get_torrent_link(href)
+                torrent, created = Torrent.objects.get_or_create(link=final_link, defaults={"backend" : self.name,
                                                                                 "seeds" : seeds,
                                                                                 "rating" : rating,
                                                                                 "text" : text})
@@ -92,21 +95,22 @@ class IsoHunt(BackendBase):
 
         return links_objects
 
-    def get_torrent(self, torrent_link, name=None):
-        page = self.tree(torrent_link)
+    def _get_torrent_link(self, torrent_page):
+        page = self.tree(torrent_page)
         if not page:
-            raise NoTorrentFound(torrent_link)
+            raise NoTorrentFound(torrent_page)
 
         link = page("a[target=_top]")
         if not link:
-            raise NoTorrentFound(torrent_link)
+            raise NoTorrentFound(torrent_page)
 
-        link = link[0].get("href")
+        return self.prepare_url(link[0].get("href"))
 
-        filename = os.path.join(self.watch_folder, name or link.split("/")[-1])
+    def get_torrent(self, torrent_link, name=None):
+        filename = os.path.join(self.watch_folder, name or torrent_link.split("/")[-1])
 
         with open(filename, "w") as out:
-            torrent = self.get(link)
+            torrent = self.get(torrent_link)
             out.write(torrent.content)
 
-        return link, filename
+        return filename

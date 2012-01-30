@@ -8,6 +8,7 @@ class Torrent(models.Model):
     backend = models.CharField(max_length=500, db_index=True)
     link = models.CharField(max_length=500, null=False, db_index=True)
     sha1 = models.CharField(max_length=500, db_index=True, unique=True, null=False)
+    filename = models.CharField(max_length=500)
 
     class MongoMeta:
         capped = True
@@ -18,3 +19,16 @@ class Torrent(models.Model):
         sha.update(self.link)
         self.sha1 = sha.hexdigest()
         super(Torrent, self).save(*args, **kwargs)
+
+    def download(self):
+        from torretta.backends import backends
+        backend = backends.get(self.backend)()
+        assert backend, "%s backend has been disabled" % self.backend
+
+        name = self.text
+        if not name.endswith(".torrent"):
+            name = name + ".torrent"
+        self.filename = backend.get_torrent(self.link, name=name)
+        self.save()
+        return self.filename
+

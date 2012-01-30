@@ -159,3 +159,5 @@ LOGGING = {
 
 # rtorrent settings
 TORRENT_WATCH_FOLDER = os.path.join(PROJECT_ROOT, "watched")
+
+RTORRENT_WATCHED_FOLDER = TORRENT_WATCH_FOLDER
