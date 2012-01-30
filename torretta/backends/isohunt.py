@@ -15,7 +15,7 @@ class IsoHunt(BackendBase):
     def __init__(self, *args, **kwargs):
         super(IsoHunt, self).__init__(*args, **kwargs)
         self.base_url = 'http://isohunt.com'
-        self.url = 'http://isohunt.com/torrents/%s?iht=-1&ihp=1&ihs1=1&iho1=d'
+        self.url = 'http://isohunt.com/torrents/?iht=-1&ihp=1&ihs1=1&iho1=d&ihq=%s'
         self.last_query = None
 
     def prepare_url(self, query):
@@ -63,6 +63,8 @@ class IsoHunt(BackendBase):
 
                 href = href.replace("comments", "summary")
 
+                text = l.getnext().text_content()
+
                 seeds = l.getparent().getparent().cssselect(".row1") or 0
                 if seeds:
                     try:
@@ -72,7 +74,8 @@ class IsoHunt(BackendBase):
 
                 torrent, created = Torrent.objects.get_or_create(link=href, defaults={"backend" : self.name,
                                                                                 "seeds" : seeds,
-                                                                                "rating" : rating})
+                                                                                "rating" : rating,
+                                                                                "text" : text})
                 if not created:
                     torrent.seeds = seeds
                     torrent.rating = rating

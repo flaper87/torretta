@@ -14,9 +14,13 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': ':memory:',
+    # },
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': ':memory:',
+        'NAME': 'tests.db',
     },
     # 'mongodb': {
     #     'ENGINE': 'django_mongodb_engine',

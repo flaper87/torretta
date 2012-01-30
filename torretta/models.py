@@ -2,6 +2,7 @@ import hashlib
 from django.db import models
 
 class Torrent(models.Model):
+    text = models.CharField(max_length=500, db_index=True)
     seeds = models.IntegerField(db_index=True, default=0)
     rating = models.IntegerField(db_index=True, default=0)
     backend = models.CharField(max_length=500, db_index=True)
